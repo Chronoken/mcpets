@@ -45,7 +45,7 @@ public enum Items {
     Items(String name) {
         this.name = name;
         if (ItemsListConfig.getInstance().getItemStack(name) != null) {
-            item = ItemsListConfig.getInstance().getItemStack(name);
+            item = ItemsListConfig.getInstance().getItemStack(name).clone();
             prepareItem();
             return;
         }
@@ -87,7 +87,39 @@ public enum Items {
     private void prepareItem() {
         ItemMeta meta = item.getItemMeta();
         PDCTag.set(meta, getLocalizedName());
+        
+        applyTranslations(meta);
+        
         item.setItemMeta(meta);
+    }
+    
+    private void applyTranslations(ItemMeta meta) {
+        switch (name) {
+            case "mount":
+                meta.displayName(Language.MOUNT_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.MOUNT_ITEM_DESCRIPTION.getMessage()));
+                break;
+            case "rename":
+                meta.displayName(Language.RENAME_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.RENAME_ITEM_DESCRIPTION.getMessage()));
+                break;
+            case "petmenu", "mountmenu":
+                meta.displayName(Language.BACK_TO_PETMENU_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.BACK_TO_PETMENU_ITEM_DESCRIPTION.getMessage()));
+                break;
+            case "inventory":
+                meta.displayName(Language.INVENTORY_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.INVENTORY_ITEM_DESCRIPTION.getMessage()));
+                break;
+            case "skins":
+                meta.displayName(Language.SKINS_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.SKINS_ITEM_DESCRIPTION.getMessage()));
+                break;
+            case "equipment":
+                meta.displayName(Language.EQUIPMENT_ITEM_NAME.getComponent());
+                meta.lore(Utils.toComponents(Language.EQUIPMENT_DESCRIPTION.getMessage()));
+                break;
+        }
     }
 
     public String getLocalizedName() {
